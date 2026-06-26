@@ -3,6 +3,8 @@
 !.env.example
 !.env.local.example
 node_modules/
+*_PlainBackup*.sql
+*_PlainBackup*.docx
 .next/
 dist/
 build/

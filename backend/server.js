@@ -6,16 +6,28 @@ require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 4000;
 
-const allowedOrigins = ("https://estimate-project-omega.vercel.app/" || "http://localhost:3000,http://127.0.0.1:3000")
+const allowedOrigins = (
+  process.env.CORS_ORIGIN || "http://localhost:3000,http://127.0.0.1:3000"
+)
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
 
-app.use(cors());
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+      callback(new Error(`CORS blocked for origin: ${origin}`));
+    }
+  })
+);
 app.use(express.json());
 
 const useSsl = String(process.env.DB_SSL || "false").toLowerCase() === "true";
-const connectionString = process.env.DB_STRING;
+const connectionString = process.env.DB_STRING || process.env.DATABASE_URL;
 
 const pool = connectionString
   ? new Pool({
@@ -45,6 +57,77 @@ app.get("/health", async (_req, res) => {
     res.json({ ok: true, message: "API and DB are reachable." });
   } catch (error) {
     res.status(500).json({ ok: false, message: error.message });
+  }
+});
+
+app.post("/api/auth/validate-organization", async (req, res) => {
+  const { orgCode } = req.body;
+
+  if (!orgCode || !String(orgCode).trim()) {
+    return res.status(400).json({ message: "Organization code is required." });
+  }
+
+  try {
+    const result = await pool.query(
+      `SELECT "OrganizationId", "OrgCode", "OrgName"
+       FROM "MasterOrganization"
+       WHERE UPPER("OrgCode") = UPPER($1)
+         AND COALESCE("MarkForDeletion", false) = false`,
+      [String(orgCode).trim()]
+    );
+
+    if (!result.rows[0]) {
+      return res.status(404).json({ message: "Organization not found. Please check the organization code." });
+    }
+
+    return res.json(result.rows[0]);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+app.post("/api/auth/login", async (req, res) => {
+  const { orgCode, userLoginName, password } = req.body;
+
+  if (!orgCode || !String(orgCode).trim()) {
+    return res.status(400).json({ message: "Organization code is required." });
+  }
+  if (!userLoginName || !String(userLoginName).trim()) {
+    return res.status(400).json({ message: "User name is required." });
+  }
+  if (!password) {
+    return res.status(400).json({ message: "Password is required." });
+  }
+
+  try {
+    const result = await pool.query(
+      `SELECT u."UserId", u."UserLoginName", u."UserName",
+              d."DesignationName", uc."UserCategoryName",
+              o."OrganizationId", o."OrgCode", o."OrgName"
+       FROM "MasterUser" u
+       INNER JOIN "MasterOrganization" o ON o."OrganizationId" = u."OrganizationId"
+       INNER JOIN "MasterDesignation" d ON d."DesignationId" = u."DesignationId"
+       INNER JOIN "MasterUserCategory" uc ON uc."UserCategoryId" = u."UserCategoryId"
+       WHERE UPPER(o."OrgCode") = UPPER($1)
+         AND UPPER(u."UserLoginName") = UPPER($2)
+         AND u."UserPWD" = $3
+         AND COALESCE(u."MarkForDeletion", false) = false
+         AND COALESCE(o."MarkForDeletion", false) = false`,
+      [String(orgCode).trim(), String(userLoginName).trim(), String(password)]
+    );
+
+    if (!result.rows[0]) {
+      return res.status(401).json({ message: "Invalid user name or password." });
+    }
+
+    return res.json(result.rows[0]);
+  } catch (error) {
+    if (error.message && error.message.includes('"UserPWD"')) {
+      return res.status(500).json({
+        message: "UserPWD column is missing. Run database/add_master_user_pwd.sql on your database."
+      });
+    }
+    return res.status(500).json({ message: error.message });
   }
 });
 

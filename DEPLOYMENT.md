@@ -1,13 +1,13 @@
-# Online Hosting Guide (Frontend + Backend + Neon)
+# Online Hosting Guide (Softchariot-Website)
 
 This project is ready for online hosting with:
-- `frontend` on Vercel (Next.js)
-- `backend` on Render or Railway (Node.js/Express)
-- Neon PostgreSQL as hosted database
+- `frontend` on **Vercel** (project: Softchariot-Website)
+- `backend` on **Render** (Node.js/Express)
+- **Neon** PostgreSQL database: `01_WERMS`
 
-## 1) Prerequisites
+## GitHub Repository
 
-- Repository should be on GitHub (`MCPL-TMS`).
+- **Repo:** `Softchariot/Softchariot-Website`
 - Neon database should be reachable using SSL connection string.
 - Local app already working (you confirmed this).
 
