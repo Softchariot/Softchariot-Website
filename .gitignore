@@ -3,6 +3,7 @@
 !.env.example
 !.env.local.example
 node_modules/
+.vercel/
 *_PlainBackup*.sql
 *_PlainBackup*.docx
 .next/
