@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — SoftChariot</title>
+  <meta name="description" content="Client login for SoftChariot online applications." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-text">SoftChariot</span>
+        <img class="brand-image" src="images/softchariot-hero.png" alt="" width="72" height="40" />
+      </a>
+      <nav class="nav" id="primary-nav" aria-label="Primary">
+        <a href="index.html#about">About</a>
+        <a href="index.html#products">Products</a>
+        <a href="index.html#contact">Contact</a>
+        <a class="nav-link-muted" href="download.html">Download</a>
+        <div class="nav-dropdown">
+          <button class="btn btn-nav nav-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="login-menu">
+            Login
+          </button>
+          <div class="nav-dropdown-menu" id="login-menu" role="menu">
+            <a role="menuitem" href="https://estimate-project-ggd7.vercel.app/" target="_blank" rel="noopener noreferrer">Online Estimation Login</a>
+            <a role="menuitem" href="https://mcpl-task-system-ebab.onrender.com/" target="_blank" rel="noopener noreferrer">Task Management System</a>
+          </div>
+        </div>
+      </nav>
+      <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="dev-banner" role="status">
+      <p>This Web Site is Still Under Development and All Features may not be functional</p>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <div class="container">
+      <div class="page-panel">
+        <p class="eyebrow">Client Access</p>
+        <h1>Login</h1>
+        <p>Choose the SoftChariot application you want to sign in to.</p>
+        <div class="login-links">
+          <a class="btn btn-secondary" href="https://estimate-project-ggd7.vercel.app/" target="_blank" rel="noopener noreferrer">Online Estimation Login</a>
+          <a class="btn btn-secondary" href="https://mcpl-task-system-ebab.onrender.com/" target="_blank" rel="noopener noreferrer">Task Management System</a>
+          <a class="btn btn-primary" href="index.html">Back to Home</a>
+        </div>
+        <p style="margin-top: 1.25rem; font-size: 0.92rem; color: var(--ink-soft);">
+          Need access? <a href="index.html#contact">Contact SoftChariot</a>
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="brand-text">SoftChariot</span>
+        <p>Custom Software. Rapid Delivery. Reliable Results.</p>
+      </div>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="index.html">Home</a>
+        <a href="download.html">Download</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+      <p class="footer-copy">&copy; <span id="year"></span> SoftChariot. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
